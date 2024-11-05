@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akshita & Prit's Wedding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Alex+Brush&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: url('couple.jpg') center/cover no-repeat;
+            filter: brightness(0.8);
+            z-index: 1;
+        }
+
+        .overlay {
+            display: none;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .couple-names {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #2c2c2c;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 1rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #2c2c2c;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background: #2c2c2c;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        .main-content {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            z-index: 5;
+            text-align: center;
+        }
+
+        .hero-text {
+            font-family: 'Alex Brush', cursive;
+            font-size: 4rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .date {
+            font-family: 'Lato', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 112vh;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .section.active {
+            display: flex;
+        }
+
+        .section-content {
+            max-width: 800px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .ceremony-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .ceremony-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2c2c2c;
+        }
+
+        .ceremony-details {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            display: none;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #2c2c2c;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            color: #000;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero-text {
+                font-size: 2.5rem;
+            }
+
+            .couple-names {
+                font-size: 2rem;
+            }
+        }
+
+        /* Add these new styles for the invitation section */
+        .invitation-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            width: 100%;
+            max-height: calc(100vh - 250px);
+            overflow-y: auto;
+            padding-right: 1rem;
+            margin-top: 4rem;
+            position: relative;
+            scrollbar-width: none;
+            scrollbar-color: #2c2c2c rgba(0, 0, 0, 0.1);
+        }
+
+        .ceremony-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .ceremony-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .ceremony-card::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        .ceremony-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #2c2c2c;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .ceremony-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #2c2c2c, transparent);
+        }
+
+        .ceremony-time {
+            font-family: 'Lato', sans-serif;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 1rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .ceremony-details {
+            font-family: 'Lato', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .ceremony-icon {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #2c2c2c;
+        }
+
+        /* Scrollbar styling for webkit browsers */
+        .invitation-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .invitation-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+        }
+
+        .invitation-container::-webkit-scrollbar-thumb {
+            background: #2c2c2c;
+            border-radius: 3px;
+        }
+
+        /* Scroll to bottom button */
+        .scroll-bottom-btn {
+            position: fixed;
+            right: 2rem;
+            bottom: 2rem;
+            background: rgba(44, 44, 44, 0.8);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .scroll-bottom-btn:hover {
+            background: rgba(44, 44, 44, 1);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .invitation-container {
+                max-height: calc(100vh - 200px);
+                padding-right: 0.5rem;
+            }
+
+            .scroll-bottom-btn {
+                right: 1rem;
+                bottom: 1rem;
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="overlay"></div>
+
+    <header class="header">
+        <h1 class="couple-names">Akshita & Prit</h1>
+        <nav class="nav">
+            <a href="#about" class="nav-link">About Us</a>
+            <a href="#invitation" class="nav-link">Invitation</a>
+            <a href="#location" class="nav-link">Location</a>
+            <a href="#rsvp" class="nav-link">Acknowledgement</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="hero">
+            <h2 class="hero-text">Me and you.<br>Just us two.</h2>
+            <p class="date">DECEMBER 7, 2024</p>
+        </div>
+    </main>
+
+    <button class="close-btn">&times;</button>
+
+    <section id="about" class="section">
+        <div class="section-content">
+            <h2 class="ceremony-title">Our Story</h2>
+            <p class="ceremony-details">
+                Every love story is beautiful, but ours is our favorite. We met in the July of 2021, 
+                and since then, our lives have been filled with countless moments of joy, laughter, and adventure.
+            </p>
+        </div>
+    </section>
+
+    <section id="invitation" class="section">
+        <div class="section-content">
+            <div class="invitation-container">
+                <div class="ceremony-card">
+                    <div class="ceremony-icon">✧</div>
+                    <h3 class="ceremony-title">Phoolon ki Bahaar</h3>
+                    <p class="ceremony-time">December 6, 2024 • 07:00 AM</p>
+                    <p class="ceremony-details">
+                        Join us for this auspicious traditional ceremony where turmeric paste 
+                        is applied to bless the bride and groom with its natural beauty and 
+                        purifying properties.
+                    </p>
+                </div>
+
+                <div class="ceremony-card">
+                    <div class="ceremony-icon">✧</div>
+                    <h3 class="ceremony-title">Mangal Mahurat</h3>
+                    <p class="ceremony-time">December 6, 2024 • 01:00 PM</p>
+                    <p class="ceremony-details">
+                        Join us for this ritual where the bride and groom seek blessings from
+                        Mother Earth before setting up the mandap.
+                    </p>
+                </div>
+
+                <div class="ceremony-card">
+                    <div class="ceremony-icon">♪</div>
+                    <h3 class="ceremony-title">Yeh Shaam Mastani</h3>
+                    <p class="ceremony-time">December 6, 2024 • 08:30 PM</p>
+                    <p class="ceremony-details">
+                        Come celebrate with us for an enchanting evening filled with music, 
+                        dance, and festivities as we embrace the joy of our union.
+                    </p>
+                </div>
+
+                <div class="ceremony-card">
+                    <div class="ceremony-icon">♥</div>
+                    <h3 class="ceremony-title">The Wedding Vows</h3>
+                    <p class="ceremony-time">December 7, 2024 • 06:30 PM</p>
+                    <p class="ceremony-details">
+                        We invite you to witness our sacred union as we exchange vows and 
+                        begin our journey of forever together. Your presence will make this 
+                        moment even more special.
+                    </p>
+                </div>
+            </div>
+            <button class="scroll-bottom-btn" id="scrollBottomBtn">
+                ↓
+            </button>
+        </div>
+    </section>
+
+    <section id="location" class="section">
+        <div class="section-content">
+            <h2 class="ceremony-title">Ratan Farm</h2>
+            <p class="ceremony-details">
+                New outer ring road, Mota Varachha,<br>
+                Surat, Gujarat 394107<br><br>
+                <a href="https://maps.app.goo.gl/43oQzRK8n7U937mM9" target="_blank" 
+                   style="color: #2c2c2c; text-decoration: underline;">Get Directions</a>
+            </p>
+        </div>
+    </section>
+
+    <section id="rsvp" class="section">
+        <div class="section-content">
+            <h2 class="ceremony-title">Acknowledgement</h2>
+            <p class="ceremony-details">
+                We look forward to celebrating with you!<br>
+                Kindly let us know whether you will be able to attend by November 28, 2024<br><br>
+                <a href="https://wa.me/918866009374?text=Yes%2C%20I%20will%20attend%20the%20wedding" target="_blank" 
+                   style="color: #2c2c2c; text-decoration: underline;">RSVP via WhatsApp</a>
+            </p>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+            const hero = document.querySelector('.hero');
+            const closeButton = document.querySelector('.close-btn');
+            const scrollBottomBtn = document.getElementById('scrollBottomBtn');
+            const invitationContainer = document.querySelector('.invitation-container');
+
+            // Function to show the hero section
+            const showHero = () => {
+                hero.style.display = 'flex';
+                closeButton.style.display = 'none';
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                    section.style.display = 'none';
+                });
+            };
+
+            // Function to show a specific section
+            const showSection = (sectionId) => {
+                hero.style.display = 'none';
+                closeButton.style.display = 'block';
+                sections.forEach(section => {
+                    if (section.id === sectionId) {
+                        section.classList.add('active');
+                        section.style.display = 'flex';
+                    } else {
+                        section.classList.remove('active');
+                        section.style.display = 'none';
+                    }
+                });
+            };
+
+            // Add click handlers for navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    showSection(targetId);
+                });
+            });
+
+            // Add click handler for close button
+            closeButton.addEventListener('click', () => {
+                showHero();
+            });
+
+            // Add event listener for the Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    showHero();
+                }
+            });
+
+            // Scroll to bottom functionality
+            if (scrollBottomBtn && invitationContainer) {
+                scrollBottomBtn.addEventListener('click', () => {
+                    invitationContainer.scrollTo({
+                        top: invitationContainer.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                });
+
+                // Show/hide button based on scroll position
+                invitationContainer.addEventListener('scroll', () => {
+                    const isNearBottom = invitationContainer.scrollHeight - invitationContainer.scrollTop 
+                                       <= invitationContainer.clientHeight + 100;
+                    
+                    scrollBottomBtn.style.display = isNearBottom ? 'none' : 'flex';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
