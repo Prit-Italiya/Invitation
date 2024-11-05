@@ -29,6 +29,12 @@
             z-index: 1;
         }
 
+        @media (max-width: 768px) {
+            .background {
+                background: url('couple-mini.jpg') center/cover no-repeat;
+            }
+        }
+
         .overlay {
             display: none;
         }
@@ -327,7 +333,8 @@
         /* Mobile responsiveness */
         @media (max-width: 768px) {
             .invitation-container {
-                max-height: calc(100vh - 200px);
+                margin-top: 9rem;
+                max-height: calc(100vh - 20rem);
                 padding-right: 0.5rem;
             }
 
